@@ -2,6 +2,8 @@ name: PR Review
 
 on:
   pull_request:
+    branches:
+      - develop       
     types: [opened, synchronize, reopened]
 
 jobs:
@@ -30,7 +32,7 @@ jobs:
       - name: Run OpenCode PR Review
         env:
           OPENCODE_API_KEY: ${{ secrets.OPENCODE_API_KEY }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Required for the agent to write PR comments
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
         run: |
           opencode github run \
             -m "opencode/big-pickle" \

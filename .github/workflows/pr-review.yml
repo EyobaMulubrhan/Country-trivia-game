@@ -10,12 +10,14 @@ jobs:
     permissions:
       contents: read
       pull-requests: write
+      id-token: write     
+      issues: write      
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 0  
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -23,13 +25,13 @@ jobs:
           node-version: '20'
 
       - name: Install OpenCode CLI
-        run: npm install -g opencode-ai
+        run: npm install -g opencode-ai@latest
 
       - name: Run OpenCode PR Review
         env:
           OPENCODE_API_KEY: ${{ secrets.OPENCODE_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Required for the agent to write PR comments
         run: |
-          opencode review \
-            --model "opencode/big-pickle" \
-            --comment \
-            "${{ github.event.pull_request.number }}"
+          opencode github run \
+            -m "opencode/big-pickle" \
+            --auto
